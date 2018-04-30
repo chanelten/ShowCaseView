@@ -124,16 +124,17 @@ public class GuideView extends FrameLayout {
             Bitmap bitmap = Bitmap.createBitmap(canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888);
             Canvas tempCanvas = new Canvas(bitmap);
 
-            float lineWidth = 3 * density;
-            float strokeCircleWidth = 3 * density;
-            float circleSize = 6 * density;
-            float circleInnerSize = 5f * density;
-
-
+            // Paint background
             mPaint.setColor(0xdd000000);
             mPaint.setStyle(Paint.Style.FILL);
             mPaint.setAntiAlias(true);
             tempCanvas.drawRect(canvas.getClipBounds(), mPaint);
+
+            // Paint pointer
+            float lineWidth = 3 * density;
+            float strokeCircleWidth = 3 * density;
+            float circleSize = 6 * density;
+            float circleInnerSize = 5f * density;
 
             paintLine.setStyle(Paint.Style.FILL);
             paintLine.setColor(Color.WHITE);
@@ -160,15 +161,14 @@ public class GuideView extends FrameLayout {
             tempCanvas.drawLine(x, startYLineAndCircle, x,
                     stopY
                     , paintLine);
-
             tempCanvas.drawCircle(x, startYLineAndCircle, circleSize, paintCircle);
             tempCanvas.drawCircle(x, startYLineAndCircle, circleInnerSize, paintCircleInner);
 
-
+            // Paint target
             targetPaint.setXfermode(XFERMODE_CLEAR);
             targetPaint.setAntiAlias(true);
-
             tempCanvas.drawRoundRect(rect, 15, 15, targetPaint);
+
             canvas.drawBitmap(bitmap, 0, 0, emptyPaint);
         }
     }
