@@ -28,11 +28,12 @@ import android.widget.FrameLayout;
 
 public class GuideView extends FrameLayout {
 
-
+    private static final int DEFAULT_RADIUS = 15;
     private static final float INDICATOR_HEIGHT = 30;
 
     private float density;
     private View target;
+    private int radius;
     private RectF rect;
     private GuideMessageView mMessageView;
     private boolean isTop;
@@ -66,11 +67,12 @@ public class GuideView extends FrameLayout {
         outside, anywhere, targetView
     }
 
-    private GuideView(Context context, View view) {
+    private GuideView(Context context, View view, int radius) {
         super(context);
         setWillNotDraw(false);
 
         this.target = view;
+        this.radius = radius;
 
         density = context.getResources().getDisplayMetrics().density;
 
@@ -82,6 +84,7 @@ public class GuideView extends FrameLayout {
 
         mMessageView = new GuideMessageView(getContext());
         final int padding = (int) (5 * density);
+        mMessageView.setRadius(radius);
         mMessageView.setPadding(padding, padding, padding, padding);
         mMessageView.setColor(Color.WHITE);
 
@@ -167,7 +170,7 @@ public class GuideView extends FrameLayout {
             // Paint target
             targetPaint.setXfermode(XFERMODE_CLEAR);
             targetPaint.setAntiAlias(true);
-            tempCanvas.drawRoundRect(rect, 15, 15, targetPaint);
+            tempCanvas.drawRoundRect(rect, radius, radius, targetPaint);
 
             canvas.drawBitmap(bitmap, 0, 0, emptyPaint);
         }
@@ -327,8 +330,13 @@ public class GuideView extends FrameLayout {
         mMessageView.setContentTextSize(size);
     }
 
+    public void setBorder(int color, float width) {
+        mMessageView.setBorder(color, width);
+    }
+
 
     public static class Builder {
+        private Integer radius = -1;
         private View targetView;
         private String title, contentText;
         private Gravity gravity;
@@ -341,9 +349,16 @@ public class GuideView extends FrameLayout {
         private Spannable contentSpan;
         private Typeface titleTypeFace, contentTypeFace;
         private GuideListener guideListener;
+        private Integer borderColor;
+        private Float borderWidth;
 
         public Builder(Context context) {
             this.context = context;
+        }
+
+        public Builder setRadius(int radius) {
+            this.radius = radius;
+            return this;
         }
 
         public Builder setTargetView(View view) {
@@ -423,8 +438,14 @@ public class GuideView extends FrameLayout {
             return this;
         }
 
+        public Builder setBorder(int color, float width) {
+            this.borderColor = color;
+            this.borderWidth = width;
+            return this;
+        }
+
         public GuideView build() {
-            GuideView guideView = new GuideView(context, targetView);
+            GuideView guideView = new GuideView(context, targetView, radius != null ? radius : DEFAULT_RADIUS);
             guideView.mGravity = gravity != null ? gravity : Gravity.auto;
             guideView.dismissType = dismissType != null ? dismissType : DismissType.targetView;
 
@@ -450,11 +471,12 @@ public class GuideView extends FrameLayout {
             if (guideListener != null) {
                 guideView.mGuideListener = guideListener;
             }
+            if (borderColor != null && borderWidth != null) {
+                guideView.setBorder(borderColor, borderWidth);
+            }
 
             return guideView;
         }
-
-
     }
 }
 

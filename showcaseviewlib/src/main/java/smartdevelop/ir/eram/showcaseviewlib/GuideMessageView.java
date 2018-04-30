@@ -20,7 +20,7 @@ import android.widget.TextView;
 
 class GuideMessageView extends LinearLayout {
 
-    private final int DEFAULT_RADIUS = 15;
+    private int radius = -1;
 
     private Paint mPaintBackground;
     private Paint mPaintBorder;
@@ -29,7 +29,6 @@ class GuideMessageView extends LinearLayout {
     private TextView mTitleTextView;
     private TextView mContentTextView;
     float density;
-
 
     GuideMessageView(Context context) {
         super(context);
@@ -44,11 +43,6 @@ class GuideMessageView extends LinearLayout {
 //        float radius = density * 3.0f;
 //        float dy = density * 2f;
 //        mPaintBackground.setShadowLayer(radius, 0, dy, 0xFF3D3D3D);
-
-        mPaintBorder = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mPaintBorder.setStyle(Paint.Style.STROKE);
-        mPaintBorder.setColor(0xFFCCCCCC);
-        mPaintBorder.setStrokeWidth(10.0f);
 
         setLayerType(LAYER_TYPE_SOFTWARE, null);
         setOrientation(VERTICAL);
@@ -127,6 +121,19 @@ class GuideMessageView extends LinearLayout {
         invalidate();
     }
 
+    public void setBorder(int color, float width) {
+        if (mPaintBorder == null) {
+            mPaintBorder = new Paint(Paint.ANTI_ALIAS_FLAG);
+            mPaintBorder.setStyle(Paint.Style.STROKE);
+        }
+        mPaintBorder.setColor(color);
+        mPaintBorder.setStrokeWidth(width);
+    }
+
+    public void setRadius(int radius) {
+        this.radius = radius;
+    }
+
     int location[] = new int[2];
 
     @Override
@@ -138,8 +145,9 @@ class GuideMessageView extends LinearLayout {
                 getPaddingTop(),
                 canvas.getWidth() - getPaddingRight(),
                 canvas.getHeight() - getPaddingBottom());
-
-        canvas.drawRoundRect(mRect, DEFAULT_RADIUS, DEFAULT_RADIUS, mPaintBackground);
-        canvas.drawRoundRect(mRect, DEFAULT_RADIUS, DEFAULT_RADIUS, mPaintBorder);
+        canvas.drawRoundRect(mRect, radius, radius, mPaintBackground);
+        if (mPaintBorder != null) {
+            canvas.drawRoundRect(mRect, radius, radius, mPaintBorder);
+        }
     }
 }
