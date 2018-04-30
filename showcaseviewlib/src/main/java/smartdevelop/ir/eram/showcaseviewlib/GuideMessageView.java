@@ -20,7 +20,10 @@ import android.widget.TextView;
 
 class GuideMessageView extends LinearLayout {
 
-    private Paint mPaint;
+    private final int DEFAULT_RADIUS = 15;
+
+    private Paint mPaintBackground;
+    private Paint mPaintBorder;
     private RectF mRect;
 
     private TextView mTitleTextView;
@@ -36,14 +39,18 @@ class GuideMessageView extends LinearLayout {
 
         mRect = new RectF();
 
-        mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mPaint.setStrokeCap(Paint.Cap.ROUND);
+        mPaintBackground = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaintBackground.setStrokeCap(Paint.Cap.ROUND);
 //        float radius = density * 3.0f;
 //        float dy = density * 2f;
-//        mPaint.setShadowLayer(radius, 0, dy, 0xFF3D3D3D);
+//        mPaintBackground.setShadowLayer(radius, 0, dy, 0xFF3D3D3D);
+
+        mPaintBorder = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaintBorder.setStyle(Paint.Style.STROKE);
+        mPaintBorder.setColor(0xFFCCCCCC);
+        mPaintBorder.setStrokeWidth(10.0f);
 
         setLayerType(LAYER_TYPE_SOFTWARE, null);
-
         setOrientation(VERTICAL);
         setGravity(Gravity.CENTER);
 
@@ -114,9 +121,8 @@ class GuideMessageView extends LinearLayout {
     }
 
     public void setColor(int color) {
-
-        mPaint.setAlpha(255);
-        mPaint.setColor(color);
+        mPaintBackground.setAlpha(255);
+        mPaintBackground.setColor(color);
 
         invalidate();
     }
@@ -126,17 +132,14 @@ class GuideMessageView extends LinearLayout {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
-
         this.getLocationOnScreen(location);
-
 
         mRect.set(getPaddingLeft(),
                 getPaddingTop(),
                 canvas.getWidth() - getPaddingRight(),
                 canvas.getHeight() - getPaddingBottom());
 
-
-        canvas.drawRoundRect(mRect, 15, 15, mPaint);
+        canvas.drawRoundRect(mRect, DEFAULT_RADIUS, DEFAULT_RADIUS, mPaintBackground);
+        canvas.drawRoundRect(mRect, DEFAULT_RADIUS, DEFAULT_RADIUS, mPaintBorder);
     }
 }
