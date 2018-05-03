@@ -29,11 +29,13 @@ import android.widget.FrameLayout;
 public class GuideView extends FrameLayout {
 
     private static final int DEFAULT_RADIUS = 15;
+    private static final int DEFAULT_BACKGROUND_COLOR = 0xdd000000;
     private static final float INDICATOR_HEIGHT = 30;
 
-    private float density;
-    private View target;
-    private int radius;
+    private final float density;
+    private final View target;
+    private final int radius;
+    private final int backgroundColor;
     private RectF rect;
     private GuideMessageView mMessageView;
     private boolean isTop;
@@ -54,7 +56,6 @@ public class GuideView extends FrameLayout {
     final Paint targetPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     final Xfermode XFERMODE_CLEAR = new PorterDuffXfermode(PorterDuff.Mode.CLEAR);
 
-
     public interface GuideListener {
         void onDismiss(View view);
     }
@@ -67,12 +68,13 @@ public class GuideView extends FrameLayout {
         outside, anywhere, targetView
     }
 
-    private GuideView(Context context, View view, int radius) {
+    private GuideView(Context context, View view, int radius, int backgroundColor) {
         super(context);
         setWillNotDraw(false);
 
         this.target = view;
         this.radius = radius;
+        this.backgroundColor = backgroundColor;
 
         density = context.getResources().getDisplayMetrics().density;
 
@@ -128,7 +130,7 @@ public class GuideView extends FrameLayout {
             Canvas tempCanvas = new Canvas(bitmap);
 
             // Paint background
-            mPaint.setColor(0xdd000000);
+            mPaint.setColor(backgroundColor);
             mPaint.setStyle(Paint.Style.FILL);
             mPaint.setAntiAlias(true);
             tempCanvas.drawRect(canvas.getClipBounds(), mPaint);
@@ -157,13 +159,10 @@ public class GuideView extends FrameLayout {
             marginGuide = (int) (isTop ? 15 * density : -15 * density);
 
             float startYLineAndCircle = (isTop ? rect.bottom : rect.top) + marginGuide;
-
             float x = (rect.left / 2 + rect.right / 2);
             float stopY = (yMessageView + INDICATOR_HEIGHT * density);
 
-            tempCanvas.drawLine(x, startYLineAndCircle, x,
-                    stopY
-                    , paintLine);
+            tempCanvas.drawLine(x, startYLineAndCircle, x, stopY, paintLine);
             tempCanvas.drawCircle(x, startYLineAndCircle, circleSize, paintCircle);
             tempCanvas.drawCircle(x, startYLineAndCircle, circleInnerSize, paintCircleInner);
 
@@ -336,8 +335,9 @@ public class GuideView extends FrameLayout {
 
 
     public static class Builder {
-        private Integer radius = -1;
+        private Integer radius;
         private View targetView;
+        private Integer backgroundColor;
         private String title, contentText;
         private Gravity gravity;
         private DismissType dismissType;
@@ -363,6 +363,11 @@ public class GuideView extends FrameLayout {
 
         public Builder setTargetView(View view) {
             this.targetView = view;
+            return this;
+        }
+
+        public Builder setBackgroundColor(int backgroundColor) {
+            this.backgroundColor = backgroundColor;
             return this;
         }
 
@@ -445,7 +450,9 @@ public class GuideView extends FrameLayout {
         }
 
         public GuideView build() {
-            GuideView guideView = new GuideView(context, targetView, radius != null ? radius : DEFAULT_RADIUS);
+            GuideView guideView = new GuideView(context, targetView,
+                    radius != null ? radius : DEFAULT_RADIUS,
+                    backgroundColor != null ? backgroundColor : DEFAULT_BACKGROUND_COLOR);
             guideView.mGravity = gravity != null ? gravity : Gravity.auto;
             guideView.dismissType = dismissType != null ? dismissType : DismissType.targetView;
 
