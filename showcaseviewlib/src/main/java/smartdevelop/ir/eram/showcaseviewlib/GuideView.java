@@ -147,15 +147,15 @@ public class GuideView extends FrameLayout {
             // Paint Indicator
             marginGuide = (int) (isTop ? 15 * density : -15 * density);
             final float startYTipOfIndicator = (isTop ? rect.bottom : rect.top) + marginGuide;
+            final float stopY = yMessageView + marginGuide + (isTop ? 0 : mMessageView.getHeight());
             final float x = (rect.left / 2 + rect.right / 2);
 
             if (indicatorDrawable != null) {
                 // Draw Indicator using Drawable
-                final int y = yMessageView + marginGuide;
                 final int left = (int) x - indicatorDrawable.getWidth();
-                final int top = isTop ? (int) startYTipOfIndicator : y + mMessageView.getHeight();
+                final int top = isTop ? (int) startYTipOfIndicator : (int) stopY;
                 final int right = (int) x + indicatorDrawable.getWidth();
-                final int bottom = isTop ? y : (int) startYTipOfIndicator;
+                final int bottom = isTop ? (int) stopY : (int) startYTipOfIndicator;
                 Rect destRect = new Rect(left, top, right, bottom);
 
                 tempCanvas.drawBitmap(isTop ? indicatorDrawable : BitmapUtil.rotate(indicatorDrawable, 180),
@@ -182,8 +182,6 @@ public class GuideView extends FrameLayout {
                 paintCircleInner.setStyle(Paint.Style.FILL);
                 paintCircleInner.setColor(0xffcccccc);
                 paintCircleInner.setAntiAlias(true);
-
-                float stopY = (yMessageView + indicatorHeight * density);
 
                 tempCanvas.drawLine(x, startYTipOfIndicator, x, stopY, paintLine);
                 tempCanvas.drawCircle(x, startYTipOfIndicator, circleSize, paintCircle);
