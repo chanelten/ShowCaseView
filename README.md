@@ -8,6 +8,9 @@
 <img src="./screenshots/Screenshot_2018-01-24-16-41-38.png" width="200"/>
 <img src="./screenshots/Screenshot_2018-01-24-16-53-17.png" width="200"/>
 <img src="./screenshots/Screenshot_2018-01-24-16-52-03.png" width="200"/>
+<br/>
+<img src="./screenshots/ShowCaseView_DrawableIndicator_1.png" width="200"/>
+<img src="./screenshots/ShowCaseView_DrawableIndicator_2.png" width="200"/>
 
 </p>
 
