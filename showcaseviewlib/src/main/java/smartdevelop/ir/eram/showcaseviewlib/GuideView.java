@@ -5,12 +5,14 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.Xfermode;
@@ -22,6 +24,8 @@ import android.view.ViewTreeObserver;
 import android.view.animation.AlphaAnimation;
 import android.widget.FrameLayout;
 
+import smartdevelop.ir.eram.showcaseviewlib.utils.BitmapUtil;
+
 /**
  * Created by Mohammad Reza Eram on 20/01/2018.
  */
@@ -30,12 +34,14 @@ public class GuideView extends FrameLayout {
 
     private static final int DEFAULT_RADIUS = 15;
     private static final int DEFAULT_BACKGROUND_COLOR = 0xdd000000;
-    private static final float INDICATOR_HEIGHT = 30;
+    private static final float DEFAULT_INDICATOR_HEIGHT = 100;
 
     private final float density;
     private final View target;
     private final int radius;
     private final int backgroundColor;
+    private final Bitmap indicatorDrawable;
+    private float indicatorHeight;
     private RectF rect;
     private GuideMessageView mMessageView;
     private boolean isTop;
@@ -68,13 +74,16 @@ public class GuideView extends FrameLayout {
         outside, anywhere, targetView
     }
 
-    private GuideView(Context context, View view, int radius, int backgroundColor) {
+    private GuideView(Context context, View view, int radius, int backgroundColor, Integer drawableIndicator) {
         super(context);
         setWillNotDraw(false);
 
         this.target = view;
         this.radius = radius;
         this.backgroundColor = backgroundColor;
+        this.indicatorDrawable = drawableIndicator != null ? BitmapFactory.decodeResource(getResources(), drawableIndicator) : null;
+        // TODO Remove this manual input on image drawable
+        indicatorHeight = indicatorDrawable != null ? indicatorDrawable.getHeight() : DEFAULT_INDICATOR_HEIGHT;
 
         density = context.getResources().getDisplayMetrics().density;
 
@@ -135,36 +144,51 @@ public class GuideView extends FrameLayout {
             mPaint.setAntiAlias(true);
             tempCanvas.drawRect(canvas.getClipBounds(), mPaint);
 
-            // Paint pointer
-            float lineWidth = 3 * density;
-            float strokeCircleWidth = 3 * density;
-            float circleSize = 6 * density;
-            float circleInnerSize = 5f * density;
-
-            paintLine.setStyle(Paint.Style.FILL);
-            paintLine.setColor(Color.WHITE);
-            paintLine.setStrokeWidth(lineWidth);
-            paintLine.setAntiAlias(true);
-
-            paintCircle.setStyle(Paint.Style.STROKE);
-            paintCircle.setColor(Color.WHITE);
-            paintCircle.setStrokeCap(Paint.Cap.ROUND);
-            paintCircle.setStrokeWidth(strokeCircleWidth);
-            paintCircle.setAntiAlias(true);
-
-            paintCircleInner.setStyle(Paint.Style.FILL);
-            paintCircleInner.setColor(0xffcccccc);
-            paintCircleInner.setAntiAlias(true);
-
+            // Paint Indicator
             marginGuide = (int) (isTop ? 15 * density : -15 * density);
+            final float startYTipOfIndicator = (isTop ? rect.bottom : rect.top) + marginGuide;
+            final float x = (rect.left / 2 + rect.right / 2);
 
-            float startYLineAndCircle = (isTop ? rect.bottom : rect.top) + marginGuide;
-            float x = (rect.left / 2 + rect.right / 2);
-            float stopY = (yMessageView + INDICATOR_HEIGHT * density);
+            if (indicatorDrawable != null) {
+                // Draw Indicator using Drawable
+                final int y = yMessageView + marginGuide;
+                final int left = (int) x - indicatorDrawable.getWidth();
+                final int top = isTop ? (int) startYTipOfIndicator : y + mMessageView.getHeight();
+                final int right = (int) x + indicatorDrawable.getWidth();
+                final int bottom = isTop ? y : (int) startYTipOfIndicator;
+                Rect destRect = new Rect(left, top, right, bottom);
 
-            tempCanvas.drawLine(x, startYLineAndCircle, x, stopY, paintLine);
-            tempCanvas.drawCircle(x, startYLineAndCircle, circleSize, paintCircle);
-            tempCanvas.drawCircle(x, startYLineAndCircle, circleInnerSize, paintCircleInner);
+                tempCanvas.drawBitmap(isTop ? indicatorDrawable : BitmapUtil.rotate(indicatorDrawable, 180),
+                        new Rect(0,0, indicatorDrawable.getWidth(), indicatorDrawable.getHeight()),
+                        destRect, null);
+            } else {
+                // Draw Indicator using default arrow
+                float lineWidth = 3 * density;
+                float strokeCircleWidth = 3 * density;
+                float circleSize = 6 * density;
+                float circleInnerSize = 5f * density;
+
+                paintLine.setStyle(Paint.Style.FILL);
+                paintLine.setColor(Color.WHITE);
+                paintLine.setStrokeWidth(lineWidth);
+                paintLine.setAntiAlias(true);
+
+                paintCircle.setStyle(Paint.Style.STROKE);
+                paintCircle.setColor(Color.WHITE);
+                paintCircle.setStrokeCap(Paint.Cap.ROUND);
+                paintCircle.setStrokeWidth(strokeCircleWidth);
+                paintCircle.setAntiAlias(true);
+
+                paintCircleInner.setStyle(Paint.Style.FILL);
+                paintCircleInner.setColor(0xffcccccc);
+                paintCircleInner.setAntiAlias(true);
+
+                float stopY = (yMessageView + indicatorHeight * density);
+
+                tempCanvas.drawLine(x, startYTipOfIndicator, x, stopY, paintLine);
+                tempCanvas.drawCircle(x, startYTipOfIndicator, circleSize, paintCircle);
+                tempCanvas.drawCircle(x, startYTipOfIndicator, circleInnerSize, paintCircleInner);
+            }
 
             // Paint target
             targetPaint.setXfermode(XFERMODE_CLEAR);
@@ -259,14 +283,14 @@ public class GuideView extends FrameLayout {
 
 
         //set message view bottom
-        if (rect.top + (INDICATOR_HEIGHT * density) > getHeight() / 2) {
+        if (rect.top + (indicatorHeight * density) > getHeight() / 2) {
             isTop = false;
-            yMessageView = (int) (rect.top - mMessageView.getHeight() - INDICATOR_HEIGHT * density);
+            yMessageView = (int) (rect.top - mMessageView.getHeight() - indicatorHeight * density);
         }
         //set message view top
         else {
             isTop = true;
-            yMessageView = (int) (rect.top + target.getHeight() + INDICATOR_HEIGHT * density);
+            yMessageView = (int) (rect.top + target.getHeight() + indicatorHeight * density);
         }
 
         if (yMessageView < 0)
@@ -338,6 +362,7 @@ public class GuideView extends FrameLayout {
         private Integer radius;
         private View targetView;
         private Integer backgroundColor;
+        private Integer indicatorResId;
         private String title, contentText;
         private Gravity gravity;
         private DismissType dismissType;
@@ -368,6 +393,11 @@ public class GuideView extends FrameLayout {
 
         public Builder setBackgroundColor(int backgroundColor) {
             this.backgroundColor = backgroundColor;
+            return this;
+        }
+
+        public Builder setIndicator(int indicatorResId) {
+            this.indicatorResId = indicatorResId;
             return this;
         }
 
@@ -452,7 +482,8 @@ public class GuideView extends FrameLayout {
         public GuideView build() {
             GuideView guideView = new GuideView(context, targetView,
                     radius != null ? radius : DEFAULT_RADIUS,
-                    backgroundColor != null ? backgroundColor : DEFAULT_BACKGROUND_COLOR);
+                    backgroundColor != null ? backgroundColor : DEFAULT_BACKGROUND_COLOR,
+                    indicatorResId);
             guideView.mGravity = gravity != null ? gravity : Gravity.auto;
             guideView.dismissType = dismissType != null ? dismissType : DismissType.targetView;
 
