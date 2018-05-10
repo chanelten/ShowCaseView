@@ -148,8 +148,10 @@ public class GuideView extends FrameLayout {
             tempCanvas.drawRect(canvas.getClipBounds(), mPaint);
 
             // Paint Indicator (Arrow Pointer)
-            final float startY = (isTop ? rect.bottom : rect.top) + indicatorMarginStartComputed; // Tip of arrow pointer
-            final float stopY = yMessageView + (isTop ? padding : mMessageView.getHeight() - padding); // End of arrow pointer
+            // Tip of arrow pointer
+            final float startY = (isTop ? rect.bottom : rect.top) + indicatorMarginStartComputed;
+            // End of arrow pointer
+            final float stopY = yMessageView + (isTop ? padding : mMessageView.getHeight() - padding);
             final float x = (rect.left / 2 + rect.right / 2);
 
             if (indicatorDrawable != null) {
@@ -169,6 +171,7 @@ public class GuideView extends FrameLayout {
                 float strokeCircleWidth = 3 * density;
                 float circleSize = 6 * density;
                 float circleInnerSize = 5f * density;
+                float startYTemp = startY + ((indicatorMarginStartComputed == 0 ? strokeCircleWidth + circleSize : 0) * (isTop ? 1 : -1));
 
                 paintLine.setStyle(Paint.Style.FILL);
                 paintLine.setColor(Color.WHITE);
@@ -185,9 +188,9 @@ public class GuideView extends FrameLayout {
                 paintCircleInner.setColor(0xffcccccc);
                 paintCircleInner.setAntiAlias(true);
 
-                tempCanvas.drawLine(x, startY, x, stopY, paintLine);
-                tempCanvas.drawCircle(x, startY, circleSize, paintCircle);
-                tempCanvas.drawCircle(x, startY, circleInnerSize, paintCircleInner);
+                tempCanvas.drawLine(x, startYTemp, x, stopY, paintLine);
+                tempCanvas.drawCircle(x, startYTemp, circleSize, paintCircle);
+                tempCanvas.drawCircle(x, startYTemp, circleInnerSize, paintCircleInner);
             }
 
             // Paint target
