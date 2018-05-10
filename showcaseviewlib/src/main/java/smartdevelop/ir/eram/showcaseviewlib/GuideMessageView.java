@@ -11,6 +11,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -20,6 +21,7 @@ import android.widget.TextView;
 
 class GuideMessageView extends LinearLayout {
 
+    private final Context context;
     private int radius = -1;
 
     private Paint mPaintBackground;
@@ -28,10 +30,16 @@ class GuideMessageView extends LinearLayout {
 
     private TextView mTitleTextView;
     private TextView mContentTextView;
+    private ImageButton mCloseButton;
     float density;
 
     GuideMessageView(Context context) {
+        this(context, null, null);
+    }
+
+    GuideMessageView(Context context, Position closeButtonPosition, OnClickListener closeButtonListener) {
         super(context);
+        this.context = context;
 
         density = context.getResources().getDisplayMetrics().density;
         setWillNotDraw(false);
@@ -45,18 +53,18 @@ class GuideMessageView extends LinearLayout {
 //        mPaintBackground.setShadowLayer(radius, 0, dy, 0xFF3D3D3D);
 
         setLayerType(LAYER_TYPE_SOFTWARE, null);
-        setOrientation(VERTICAL);
         setGravity(Gravity.CENTER);
 
         final int padding = (int) (10 * density);
         final int paddingBetween = (int) (6 * density);
+
+        setPadding(padding, padding, padding, padding);
 
         mTitleTextView = new TextView(context);
         mTitleTextView.setPadding(padding, padding, padding, paddingBetween);
         mTitleTextView.setGravity(Gravity.CENTER);
         mTitleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
         mTitleTextView.setTextColor(Color.BLACK);
-        addView(mTitleTextView, new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
         mContentTextView = new TextView(context);
         mContentTextView.setTextColor(Color.BLACK);
@@ -64,9 +72,48 @@ class GuideMessageView extends LinearLayout {
         mContentTextView.setPadding(padding, 0, padding, padding);
         mContentTextView.setGravity(Gravity.CENTER);
         mContentTextView.setVisibility(View.GONE);
-        addView(mContentTextView, new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-    }
 
+        LinearLayout innerLayout = new LinearLayout(context);
+        innerLayout.setOrientation(VERTICAL);
+        innerLayout.setGravity(Gravity.CENTER);
+        innerLayout.addView(mTitleTextView);
+        innerLayout.addView(mContentTextView);
+
+        if (closeButtonPosition == null) {
+            addView(innerLayout);
+        } else {
+            mCloseButton = new ImageButton(context);
+            mCloseButton.setOnClickListener(closeButtonListener);
+            LinearLayout.LayoutParams wrapWithMargin = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+            switch (closeButtonPosition) {
+                case Left:
+                    setOrientation(HORIZONTAL);
+                    wrapWithMargin.setMargins(padding, 0, 0, 0);
+                    addView(mCloseButton, wrapWithMargin);
+                    addView(innerLayout);
+                    break;
+                case Right:
+                    setOrientation(HORIZONTAL);
+                    wrapWithMargin.setMargins(0, 0, padding, 0);
+                    addView(innerLayout);
+                    addView(mCloseButton, wrapWithMargin);
+                    break;
+                case Top:
+                    setOrientation(VERTICAL);
+                    wrapWithMargin.setMargins(0, padding, 0, 0);
+                    addView(mCloseButton, wrapWithMargin);
+                    addView(innerLayout);
+                    break;
+                case Bottom:
+                    setOrientation(VERTICAL);
+                    wrapWithMargin.setMargins(0, 0, 0, padding);
+                    addView(innerLayout);
+                    addView(mCloseButton, wrapWithMargin);
+                    break;
+            }
+        }
+    }
 
     public void setTitle(String title) {
         if (title == null) {
@@ -132,6 +179,10 @@ class GuideMessageView extends LinearLayout {
 
     public void setRadius(int radius) {
         this.radius = radius;
+    }
+
+    public void setCloseBtnBackground(int drawableResId) {
+        mCloseButton.setBackgroundResource(drawableResId);
     }
 
     int location[] = new int[2];

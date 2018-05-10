@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import smartdevelop.ir.eram.showcaseviewlib.GuideView;
+import smartdevelop.ir.eram.showcaseviewlib.Position;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
                 //.setBackgroundColor(getResources().getColor(android.R.color.transparent))
                 .setIndicator(R.drawable.indicator)
                 .setIndicatorMarginStart(0)
+                .setCloseButton(Position.Left, R.drawable.close)
                 .setGuideListener(new GuideView.GuideListener() {
                     @Override
                     public void onDismiss(View view) {

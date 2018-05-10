@@ -77,7 +77,7 @@ public class GuideView extends FrameLayout {
         outside, anywhere, targetView
     }
 
-    private GuideView(Context context, View view, int radius, int backgroundColor, Integer drawableIndicator, int indicatorMarginStart) {
+    private GuideView(Context context, View view, int radius, int backgroundColor, Integer drawableIndicator, int indicatorMarginStart, Position closeButtonPosition) {
         super(context);
         setWillNotDraw(false);
 
@@ -97,7 +97,12 @@ public class GuideView extends FrameLayout {
                 locationTarget[0] + target.getWidth(),
                 locationTarget[1] + target.getHeight());
 
-        mMessageView = new GuideMessageView(getContext());
+        mMessageView = new GuideMessageView(getContext(), closeButtonPosition, new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
         mMessageView.setPadding(padding, padding, padding, padding);
         mMessageView.setRadius(radius);
         mMessageView.setColor(Color.WHITE);
@@ -362,6 +367,10 @@ public class GuideView extends FrameLayout {
         mMessageView.setBorder(color, width);
     }
 
+    public void setCloseButtonBackground(int resId) {
+        mMessageView.setCloseBtnBackground(resId);
+    }
+
 
     public static class Builder {
         private Integer radius;
@@ -382,6 +391,8 @@ public class GuideView extends FrameLayout {
         private GuideListener guideListener;
         private Integer borderColor;
         private Float borderWidth;
+        private Position closeButtonPosition;
+        private int closeButtonBackgroundResource;
 
         public Builder(Context context) {
             this.context = context;
@@ -457,6 +468,12 @@ public class GuideView extends FrameLayout {
             return this;
         }
 
+        public Builder setCloseButton(Position position, int drawableResId) {
+            this.closeButtonPosition = position;
+            this.closeButtonBackgroundResource = drawableResId;
+            return this;
+        }
+
         /**
          * the defined text size overrides any defined size in the default or provided style
          *
@@ -495,7 +512,8 @@ public class GuideView extends FrameLayout {
                     radius != null ? radius : DEFAULT_RADIUS,
                     backgroundColor != null ? backgroundColor : DEFAULT_BACKGROUND_COLOR,
                     indicatorResId,
-                    indicatorMarginStart != null ? indicatorMarginStart : DEFAULT_INDICATOR_MARGIN_START);
+                    indicatorMarginStart != null ? indicatorMarginStart : DEFAULT_INDICATOR_MARGIN_START,
+                    closeButtonPosition);
             guideView.mGravity = gravity != null ? gravity : Gravity.auto;
             guideView.dismissType = dismissType != null ? dismissType : DismissType.targetView;
 
@@ -523,6 +541,9 @@ public class GuideView extends FrameLayout {
             }
             if (borderColor != null && borderWidth != null) {
                 guideView.setBorder(borderColor, borderWidth);
+            }
+            if (closeButtonPosition != null && closeButtonBackgroundResource != 0) {
+                guideView.setCloseButtonBackground(closeButtonBackgroundResource);
             }
 
             return guideView;
