@@ -45,6 +45,7 @@ public class GuideView extends FrameLayout {
     private final float indicatorHeight;
     private final int indicatorMarginStartRequired;
     private int indicatorMarginStartComputed;
+    private final int padding;
     private RectF rect;
     private GuideMessageView mMessageView;
     private boolean isTop;
@@ -86,8 +87,9 @@ public class GuideView extends FrameLayout {
         this.indicatorDrawable = drawableIndicator != null ? BitmapFactory.decodeResource(getResources(), drawableIndicator) : null;
         this.indicatorMarginStartRequired = indicatorMarginStart;
 
-        density = context.getResources().getDisplayMetrics().density;
-        indicatorHeight = (indicatorDrawable != null ? indicatorDrawable.getHeight() : DEFAULT_INDICATOR_HEIGHT) * density;
+        this.density = context.getResources().getDisplayMetrics().density;
+        this.indicatorHeight = (indicatorDrawable != null ? indicatorDrawable.getHeight() : DEFAULT_INDICATOR_HEIGHT) * density;
+        this.padding = (int) (5 * density);
 
         int[] locationTarget = new int[2];
         target.getLocationOnScreen(locationTarget);
@@ -96,7 +98,6 @@ public class GuideView extends FrameLayout {
                 locationTarget[1] + target.getHeight());
 
         mMessageView = new GuideMessageView(getContext());
-        final int padding = (int) (5 * density);
         mMessageView.setPadding(padding, padding, padding, padding);
         mMessageView.setRadius(radius);
         mMessageView.setColor(Color.WHITE);
@@ -148,7 +149,7 @@ public class GuideView extends FrameLayout {
 
             // Paint Indicator (Arrow Pointer)
             final float startY = (isTop ? rect.bottom : rect.top) + indicatorMarginStartComputed; // Tip of arrow pointer
-            final float stopY = yMessageView + (isTop ? 0 : mMessageView.getHeight()); // End of arrow pointer
+            final float stopY = yMessageView + (isTop ? padding : mMessageView.getHeight() - padding); // End of arrow pointer
             final float x = (rect.left / 2 + rect.right / 2);
 
             if (indicatorDrawable != null) {
