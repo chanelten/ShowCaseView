@@ -58,6 +58,8 @@ class GuideMessageView extends LinearLayout {
         final int padding = (int) (10 * density);
         final int paddingBetween = (int) (6 * density);
 
+        setPadding(padding, padding, padding, padding);
+
         mTitleTextView = new TextView(context);
         mTitleTextView.setPadding(padding, padding, padding, paddingBetween);
         mTitleTextView.setGravity(Gravity.CENTER);
@@ -71,41 +73,43 @@ class GuideMessageView extends LinearLayout {
         mContentTextView.setGravity(Gravity.CENTER);
         mContentTextView.setVisibility(View.GONE);
 
-        ViewGroup.LayoutParams wrapContent = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         LinearLayout innerLayout = new LinearLayout(context);
         innerLayout.setOrientation(VERTICAL);
         innerLayout.setGravity(Gravity.CENTER);
-        innerLayout.addView(mTitleTextView, wrapContent);
-        innerLayout.addView(mContentTextView, wrapContent);
-
+        innerLayout.addView(mTitleTextView);
+        innerLayout.addView(mContentTextView);
 
         if (closeButtonPosition == null) {
             addView(innerLayout);
         } else {
             mCloseButton = new ImageButton(context);
-            mCloseButton.setPadding(padding, padding, padding, padding);
             mCloseButton.setOnClickListener(closeButtonListener);
+            LinearLayout.LayoutParams wrapWithMargin = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
             switch (closeButtonPosition) {
                 case Left:
                     setOrientation(HORIZONTAL);
-                    addView(mCloseButton, wrapContent);
-                    addView(innerLayout, wrapContent);
+                    wrapWithMargin.setMargins(padding, 0, 0, 0);
+                    addView(mCloseButton, wrapWithMargin);
+                    addView(innerLayout);
                     break;
                 case Right:
                     setOrientation(HORIZONTAL);
-                    addView(innerLayout, wrapContent);
-                    addView(mCloseButton, wrapContent);
+                    wrapWithMargin.setMargins(0, 0, padding, 0);
+                    addView(innerLayout);
+                    addView(mCloseButton, wrapWithMargin);
                     break;
                 case Top:
                     setOrientation(VERTICAL);
-                    addView(mCloseButton, wrapContent);
-                    addView(innerLayout, wrapContent);
+                    wrapWithMargin.setMargins(0, padding, 0, 0);
+                    addView(mCloseButton, wrapWithMargin);
+                    addView(innerLayout);
                     break;
                 case Bottom:
                     setOrientation(VERTICAL);
-                    addView(innerLayout, wrapContent);
-                    addView(mCloseButton, wrapContent);
+                    wrapWithMargin.setMargins(0, 0, 0, padding);
+                    addView(innerLayout);
+                    addView(mCloseButton, wrapWithMargin);
                     break;
             }
         }
