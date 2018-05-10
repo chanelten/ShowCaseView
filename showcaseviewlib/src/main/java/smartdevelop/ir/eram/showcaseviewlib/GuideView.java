@@ -32,10 +32,10 @@ import smartdevelop.ir.eram.showcaseviewlib.utils.BitmapUtil;
 
 public class GuideView extends FrameLayout {
 
-    private static final int DEFAULT_SPACE = 15;
     private static final int DEFAULT_RADIUS = 15;
     private static final int DEFAULT_BACKGROUND_COLOR = 0xdd000000;
-    private static final float DEFAULT_INDICATOR_HEIGHT = 100;
+    private static final float DEFAULT_INDICATOR_HEIGHT = 30;
+    private static final int DEFAULT_INDICATOR_MARGIN_START = 15;
 
     private final float density;
     private final View target;
@@ -43,8 +43,8 @@ public class GuideView extends FrameLayout {
     private final int backgroundColor;
     private final Bitmap indicatorDrawable;
     private final float indicatorHeight;
-    private final int spaceRequired;
-    private int spaceComputed;
+    private final int indicatorMarginStartRequired;
+    private int indicatorMarginStartComputed;
     private RectF rect;
     private GuideMessageView mMessageView;
     private boolean isTop;
@@ -76,7 +76,7 @@ public class GuideView extends FrameLayout {
         outside, anywhere, targetView
     }
 
-    private GuideView(Context context, View view, int radius, int backgroundColor, Integer drawableIndicator, int space) {
+    private GuideView(Context context, View view, int radius, int backgroundColor, Integer drawableIndicator, int indicatorMarginStart) {
         super(context);
         setWillNotDraw(false);
 
@@ -84,7 +84,7 @@ public class GuideView extends FrameLayout {
         this.radius = radius;
         this.backgroundColor = backgroundColor;
         this.indicatorDrawable = drawableIndicator != null ? BitmapFactory.decodeResource(getResources(), drawableIndicator) : null;
-        this.spaceRequired = space;
+        this.indicatorMarginStartRequired = indicatorMarginStart;
 
         density = context.getResources().getDisplayMetrics().density;
         indicatorHeight = (indicatorDrawable != null ? indicatorDrawable.getHeight() : DEFAULT_INDICATOR_HEIGHT) * density;
@@ -97,8 +97,8 @@ public class GuideView extends FrameLayout {
 
         mMessageView = new GuideMessageView(getContext());
         final int padding = (int) (5 * density);
-        mMessageView.setRadius(radius);
         mMessageView.setPadding(padding, padding, padding, padding);
+        mMessageView.setRadius(radius);
         mMessageView.setColor(Color.WHITE);
 
         addView(mMessageView, new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -147,7 +147,7 @@ public class GuideView extends FrameLayout {
             tempCanvas.drawRect(canvas.getClipBounds(), mPaint);
 
             // Paint Indicator (Arrow Pointer)
-            final float startY = (isTop ? rect.bottom : rect.top) + spaceComputed; // Tip of arrow pointer
+            final float startY = (isTop ? rect.bottom : rect.top) + indicatorMarginStartComputed; // Tip of arrow pointer
             final float stopY = yMessageView + (isTop ? 0 : mMessageView.getHeight()); // End of arrow pointer
             final float x = (rect.left / 2 + rect.right / 2);
 
@@ -280,18 +280,18 @@ public class GuideView extends FrameLayout {
         if (xMessageView < 0)
             xMessageView = 0;
 
-        spaceComputed = (int) (spaceRequired * density);
+        indicatorMarginStartComputed = (int) (indicatorMarginStartRequired * density);
         //set message view bottom
         if (rect.top + indicatorHeight > getHeight() / 2) {
             isTop = false;
-            spaceComputed = spaceComputed * -1;
-            yMessageView = (int) (spaceComputed + rect.top - mMessageView.getHeight() - indicatorHeight);
+            indicatorMarginStartComputed = indicatorMarginStartComputed * -1;
+            yMessageView = (int) (indicatorMarginStartComputed + rect.top - mMessageView.getHeight() - indicatorHeight);
         }
         //set message view top
         else {
             isTop = true;
-            spaceComputed = spaceComputed * 1;
-            yMessageView = (int) (spaceComputed + rect.top + target.getHeight() + indicatorHeight);
+            indicatorMarginStartComputed = indicatorMarginStartComputed * 1;
+            yMessageView = (int) (indicatorMarginStartComputed + rect.top + target.getHeight() + indicatorHeight);
         }
 
         if (yMessageView < 0)
@@ -364,7 +364,7 @@ public class GuideView extends FrameLayout {
         private View targetView;
         private Integer backgroundColor;
         private Integer indicatorResId;
-        private Integer space;
+        private Integer indicatorMarginStart;
         private String title, contentText;
         private Gravity gravity;
         private DismissType dismissType;
@@ -403,8 +403,8 @@ public class GuideView extends FrameLayout {
             return this;
         }
 
-        public Builder setSpace(int space) {
-            this.space = space;
+        public Builder setIndicatorMarginStart(int indicatorMarginStart) {
+            this.indicatorMarginStart = indicatorMarginStart;
             return this;
         }
 
@@ -491,7 +491,7 @@ public class GuideView extends FrameLayout {
                     radius != null ? radius : DEFAULT_RADIUS,
                     backgroundColor != null ? backgroundColor : DEFAULT_BACKGROUND_COLOR,
                     indicatorResId,
-                    space != null ? space : DEFAULT_SPACE);
+                    indicatorMarginStart != null ? indicatorMarginStart : DEFAULT_INDICATOR_MARGIN_START);
             guideView.mGravity = gravity != null ? gravity : Gravity.auto;
             guideView.dismissType = dismissType != null ? dismissType : DismissType.targetView;
 

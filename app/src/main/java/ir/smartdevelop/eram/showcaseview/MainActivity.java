@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
                 .setTargetView(view1)
                 //.setBackgroundColor(getResources().getColor(android.R.color.transparent))
                 .setIndicator(R.drawable.indicator)
+                .setIndicatorMarginStart(0)
                 .setGuideListener(new GuideView.GuideListener() {
                     @Override
                     public void onDismiss(View view) {
