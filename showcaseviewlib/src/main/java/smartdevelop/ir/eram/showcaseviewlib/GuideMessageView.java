@@ -181,8 +181,8 @@ class GuideMessageView extends LinearLayout {
         this.radius = radius;
     }
 
-    public void setCloseBtnBackground(int resId) {
-        mCloseButton.setBackgroundResource(resId);
+    public void setCloseBtnBackground(int drawableResId) {
+        mCloseButton.setBackgroundResource(drawableResId);
     }
 
     int location[] = new int[2];

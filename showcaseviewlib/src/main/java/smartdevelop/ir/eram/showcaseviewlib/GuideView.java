@@ -468,9 +468,9 @@ public class GuideView extends FrameLayout {
             return this;
         }
 
-        public Builder setCloseButton(Position position, int backgroundResId) {
+        public Builder setCloseButton(Position position, int drawableResId) {
             this.closeButtonPosition = position;
-            this.closeButtonBackgroundResource = backgroundResId;
+            this.closeButtonBackgroundResource = drawableResId;
             return this;
         }
 
