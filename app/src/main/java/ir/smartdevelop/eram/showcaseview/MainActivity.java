@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
                 //.setBackgroundColor(getResources().getColor(android.R.color.transparent))
                 .setIndicator(R.drawable.indicator)
                 .setIndicatorMarginStart(0)
-                .setCloseButton(Position.Right, "Next")
+                .setCloseButton(Position.Left, R.drawable.close)
                 .setGuideListener(new GuideView.GuideListener() {
                     @Override
                     public void onDismiss(View view) {

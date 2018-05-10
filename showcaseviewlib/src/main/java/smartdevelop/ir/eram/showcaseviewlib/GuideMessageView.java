@@ -6,13 +6,12 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.text.Spannable;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -31,7 +30,7 @@ class GuideMessageView extends LinearLayout {
 
     private TextView mTitleTextView;
     private TextView mContentTextView;
-    private Button mCloseButton;
+    private ImageButton mCloseButton;
     float density;
 
     GuideMessageView(Context context) {
@@ -83,8 +82,8 @@ class GuideMessageView extends LinearLayout {
         if (closeButtonPosition == null) {
             addView(innerLayout);
         } else {
-            mCloseButton = new Button(context);
-            mCloseButton.setPadding(padding, 0, padding, padding);
+            mCloseButton = new ImageButton(context);
+            mCloseButton.setPadding(padding, padding, padding, padding);
             mCloseButton.setOnClickListener(closeButtonListener);
 
             switch (closeButtonPosition) {
@@ -176,14 +175,6 @@ class GuideMessageView extends LinearLayout {
 
     public void setRadius(int radius) {
         this.radius = radius;
-    }
-
-    public void setCloseBtnText(int resId) {
-        mCloseButton.setText(resId);
-    }
-
-    public void setCloseBtnText(String string) {
-        mCloseButton.setText(string);
     }
 
     public void setCloseBtnBackground(int resId) {

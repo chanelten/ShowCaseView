@@ -367,14 +367,6 @@ public class GuideView extends FrameLayout {
         mMessageView.setBorder(color, width);
     }
 
-    public void setCloseButtonText(int resId) {
-        mMessageView.setCloseBtnText(resId);
-    }
-
-    public void setCloseButtonText(String text) {
-        mMessageView.setCloseBtnText(text);
-    }
-
     public void setCloseButtonBackground(int resId) {
         mMessageView.setCloseBtnBackground(resId);
     }
@@ -400,8 +392,6 @@ public class GuideView extends FrameLayout {
         private Integer borderColor;
         private Float borderWidth;
         private Position closeButtonPosition;
-        private String closeButtonText;
-        private int closeButtonTextId;
         private int closeButtonBackgroundResource;
 
         public Builder(Context context) {
@@ -478,22 +468,9 @@ public class GuideView extends FrameLayout {
             return this;
         }
 
-        public Builder setCloseButton(Position position, int textResId) {
+        public Builder setCloseButton(Position position, int backgroundResId) {
             this.closeButtonPosition = position;
-            this.closeButtonTextId = textResId;
-            this.closeButtonText = null;
-            return this;
-        }
-
-        public Builder setCloseButton(Position position, String text) {
-            this.closeButtonPosition = position;
-            this.closeButtonText = text;
-            this.closeButtonTextId = 0;
-            return this;
-        }
-
-        public Builder setCloseButtonBackground(int resId) {
-            this.closeButtonBackgroundResource = resId;
+            this.closeButtonBackgroundResource = backgroundResId;
             return this;
         }
 
@@ -565,15 +542,8 @@ public class GuideView extends FrameLayout {
             if (borderColor != null && borderWidth != null) {
                 guideView.setBorder(borderColor, borderWidth);
             }
-            if (closeButtonPosition != null) {
-                if (closeButtonText != null) {
-                    guideView.setCloseButtonText(closeButtonText);
-                } else if (closeButtonTextId != 0) {
-                    guideView.setCloseButtonText(closeButtonTextId);
-                }
-                if (closeButtonBackgroundResource != 0) {
-                    guideView.setCloseButtonBackground(closeButtonBackgroundResource);
-                }
+            if (closeButtonPosition != null && closeButtonBackgroundResource != 0) {
+                guideView.setCloseButtonBackground(closeButtonBackgroundResource);
             }
 
             return guideView;
