@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
                 .setCloseButton(Position.Left, R.drawable.close)
                 .setGuideListener(new GuideView.GuideListener() {
                     @Override
-                    public void onDismiss(View view) {
+                    public boolean onDismiss(View view) {
                         switch (view.getId()){
                             case R.id.view1:
                                 builder.setTargetView(view2).build();
@@ -56,10 +56,11 @@ public class MainActivity extends AppCompatActivity {
                                 builder.setTargetView(view5).build();
                                 break;
                             case R.id.view5:
-                                return;
+                                return true;
                         }
                         mGuideView = builder.build();
                         mGuideView.show();
+                        return false;
                     }
                 });
 
