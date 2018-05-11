@@ -89,25 +89,25 @@ class GuideMessageView extends LinearLayout {
             switch (closeButtonPosition) {
                 case Left:
                     setOrientation(HORIZONTAL);
-                    wrapWithMargin.setMargins(padding, 0, 0, 0);
+                    wrapWithMargin.setMargins(padding, padding, 0, padding);
                     addView(mCloseButton, wrapWithMargin);
                     addView(innerLayout);
                     break;
                 case Right:
                     setOrientation(HORIZONTAL);
-                    wrapWithMargin.setMargins(0, 0, padding, 0);
+                    wrapWithMargin.setMargins(0, padding, padding, padding);
                     addView(innerLayout);
                     addView(mCloseButton, wrapWithMargin);
                     break;
                 case Top:
                     setOrientation(VERTICAL);
-                    wrapWithMargin.setMargins(0, padding, 0, 0);
+                    wrapWithMargin.setMargins(padding, padding, padding, 0);
                     addView(mCloseButton, wrapWithMargin);
                     addView(innerLayout);
                     break;
                 case Bottom:
                     setOrientation(VERTICAL);
-                    wrapWithMargin.setMargins(0, 0, 0, padding);
+                    wrapWithMargin.setMargins(padding, 0, padding, padding);
                     addView(innerLayout);
                     addView(mCloseButton, wrapWithMargin);
                     break;
