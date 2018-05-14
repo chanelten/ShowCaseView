@@ -54,6 +54,7 @@ public class GuideView extends FrameLayout {
     private DismissType dismissType;
     private boolean mIsShowing;
     private boolean showOnce;
+    private String showId;
     private GuideListener mGuideListener;
     int xMessageView = 0;
     int yMessageView = 0;
@@ -229,10 +230,10 @@ public class GuideView extends FrameLayout {
         if (mGuideListener != null) {
             boolean dismissed = mGuideListener.onDismiss(target);
             if (showOnce && dismissed) {
-                PersistentData.instance(getContext()).setShowView(false);
+                PersistentData.instance(getContext()).setShowView(showId, false);
             }
         } else if (showOnce) {
-            PersistentData.instance(getContext()).setShowView(false);
+            PersistentData.instance(getContext()).setShowView(showId, false);
         }
     }
 
@@ -323,7 +324,7 @@ public class GuideView extends FrameLayout {
     }
 
     public void show() {
-        if (!PersistentData.instance(getContext()).showView()) {
+        if (!PersistentData.instance(getContext()).showView(showId)) {
             // Do nothing
             return;
         }
@@ -385,8 +386,13 @@ public class GuideView extends FrameLayout {
         mMessageView.setCloseBtnBackground(resId);
     }
 
-    public void showOnce() {
-        showOnce = true;
+    private void showOnce(String showId) {
+        this.showOnce = true;
+        this.showId = showId;
+    }
+
+    private void setShowId(String showId) {
+        this.showId = showId;
     }
 
 
@@ -411,7 +417,8 @@ public class GuideView extends FrameLayout {
         private Float borderWidth;
         private Position closeButtonPosition;
         private int closeButtonBackgroundResource;
-        boolean showOnce;
+        private boolean showOnce;
+        private String showId;
 
         public Builder(Context context) {
             this.context = context;
@@ -530,16 +537,18 @@ public class GuideView extends FrameLayout {
          * Show the ShowCaseView only once, and persists its state.
          * @return
          */
-        public Builder enableShowOnce() {
-            showOnce = true;
+        public Builder enableShowOnce(String id) {
+            this.showOnce = true;
+            this.showId = id;
             return this;
         }
 
         /**
          * Show the ShowCaseView again, and persists its state.
          */
-        public Builder disableShowOnce() {
-            PersistentData.instance(context).setShowView(true);
+        public Builder disableShowOnce(String id) {
+            this.showId = id;
+            disableShowOnce(context, id);
             return this;
         }
 
@@ -548,8 +557,8 @@ public class GuideView extends FrameLayout {
          * This function can be called even without instantiating a new Builder object.
          * @param context
          */
-        public static void disableShowOnce(Context context) {
-            PersistentData.instance(context).setShowView(true);
+        public static void disableShowOnce(Context context, String id) {
+            PersistentData.instance(context).setShowView(id, true);
         }
 
         public GuideView build() {
@@ -590,8 +599,10 @@ public class GuideView extends FrameLayout {
             if (closeButtonPosition != null && closeButtonBackgroundResource != 0) {
                 guideView.setCloseButtonBackground(closeButtonBackgroundResource);
             }
-            if (showOnce) {
-                guideView.showOnce();
+            if (showOnce && showId != null) {
+                guideView.showOnce(showId);
+            } else if (showId != null) {
+                guideView.setShowId(showId);
             }
 
             return guideView;
