@@ -20,17 +20,16 @@ public class PersistentData {
     }
 
     private final SharedPreferences sharedPreferences;
-    private final String SHOW_VIEW_KEY = "SHOW_VIEW";
 
     public PersistentData(Context context) {
         sharedPreferences = context.getSharedPreferences("smartdevelop.ir.eram.showcaseview", Context.MODE_PRIVATE);
     }
 
-    public void setShowView(boolean show) {
-        sharedPreferences.edit().putBoolean(SHOW_VIEW_KEY, show).apply();
+    public void setShowView(String id, boolean show) {
+        sharedPreferences.edit().putBoolean(id, show).apply();
     }
 
-    public boolean showView() {
-        return sharedPreferences.getBoolean(SHOW_VIEW_KEY, true);
+    public boolean showView(String id) {
+        return sharedPreferences.getBoolean(id, true);
     }
 }
