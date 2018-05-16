@@ -1,8 +1,8 @@
 package ir.smartdevelop.eram.showcaseview;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 import android.view.View;
 
 import smartdevelop.ir.eram.showcaseviewlib.GuideView;
@@ -28,8 +28,10 @@ public class MainActivity extends AppCompatActivity {
                 .setTitle(getString(R.string.title))
                 .setTitleTextSize(15)
                 .setTitleTextColor(getResources().getColor(R.color.colorAccent))
+                .setTitleGravity(Gravity.RIGHT)
                 .setContentText(getString(R.string.description))
                 .setContentTextColor(getResources().getColor(R.color.colorPrimary))
+                .setContentGravity(Gravity.LEFT)
                 .setRadius(20)
                 .setBorder(getResources().getColor(R.color.colorBorder), 10.0f)
                 .setGravity(GuideView.Gravity.center)
