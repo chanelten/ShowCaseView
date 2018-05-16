@@ -73,11 +73,13 @@ class GuideMessageView extends LinearLayout {
         mContentTextView.setGravity(Gravity.CENTER);
         mContentTextView.setVisibility(View.GONE);
 
+        LinearLayout.LayoutParams wrapParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
         LinearLayout innerLayout = new LinearLayout(context);
         innerLayout.setOrientation(VERTICAL);
         innerLayout.setGravity(Gravity.CENTER);
-        innerLayout.addView(mTitleTextView);
-        innerLayout.addView(mContentTextView);
+        innerLayout.addView(mTitleTextView, wrapParams);
+        innerLayout.addView(mContentTextView, wrapParams);
 
         if (closeButtonPosition == null) {
             addView(innerLayout);
@@ -91,24 +93,24 @@ class GuideMessageView extends LinearLayout {
                     setOrientation(HORIZONTAL);
                     wrapWithMargin.setMargins(padding, padding, 0, padding);
                     addView(mCloseButton, wrapWithMargin);
-                    addView(innerLayout);
+                    addView(innerLayout, wrapParams);
                     break;
                 case Right:
                     setOrientation(HORIZONTAL);
                     wrapWithMargin.setMargins(0, padding, padding, padding);
-                    addView(innerLayout);
+                    addView(innerLayout, wrapParams);
                     addView(mCloseButton, wrapWithMargin);
                     break;
                 case Top:
                     setOrientation(VERTICAL);
                     wrapWithMargin.setMargins(padding, padding, padding, 0);
                     addView(mCloseButton, wrapWithMargin);
-                    addView(innerLayout);
+                    addView(innerLayout, wrapParams);
                     break;
                 case Bottom:
                     setOrientation(VERTICAL);
                     wrapWithMargin.setMargins(padding, 0, padding, padding);
-                    addView(innerLayout);
+                    addView(innerLayout, wrapParams);
                     addView(mCloseButton, wrapWithMargin);
                     break;
             }
@@ -182,7 +184,8 @@ class GuideMessageView extends LinearLayout {
     }
 
     public void setCloseBtnBackground(int drawableResId) {
-        mCloseButton.setBackgroundResource(drawableResId);
+        mCloseButton.setBackgroundColor(Color.TRANSPARENT);
+        mCloseButton.setImageResource(drawableResId);
     }
 
     int location[] = new int[2];

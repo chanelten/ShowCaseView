@@ -31,14 +31,14 @@ public class MainActivity extends AppCompatActivity {
                 .setContentText("Guide Description Text\n .....Guide Description Text\n .....Guide Description Text .....")
                 .setContentTextColor(getResources().getColor(R.color.colorPrimary))
                 .setRadius(20)
-                .setBorder(Color.RED, 10.0f)
+                .setBorder(getResources().getColor(R.color.colorBorder), 10.0f)
                 .setGravity(GuideView.Gravity.center)
                 .setDismissType(GuideView.DismissType.outside)
                 .setTargetView(view1)
                 //.setBackgroundColor(getResources().getColor(android.R.color.transparent))
-                .setIndicator(R.drawable.indicator)
+                .setIndicator(R.mipmap.arrow)
                 .setIndicatorMarginStart(0)
-                .setCloseButton(Position.Left, R.drawable.close)
+                .setCloseButton(Position.Left, R.mipmap.close)
                 .setGuideListener(new GuideView.GuideListener() {
                     @Override
                     public boolean onDismiss(View view) {
