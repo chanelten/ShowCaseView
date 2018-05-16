@@ -65,6 +65,7 @@ class GuideMessageView extends LinearLayout {
         mTitleTextView.setGravity(Gravity.CENTER);
         mTitleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
         mTitleTextView.setTextColor(Color.BLACK);
+        mTitleTextView.setSingleLine(false);
 
         mContentTextView = new TextView(context);
         mContentTextView.setTextColor(Color.BLACK);
@@ -72,14 +73,14 @@ class GuideMessageView extends LinearLayout {
         mContentTextView.setPadding(padding, 0, padding, padding);
         mContentTextView.setGravity(Gravity.CENTER);
         mContentTextView.setVisibility(View.GONE);
+        mContentTextView.setSingleLine(false);
 
-        LinearLayout.LayoutParams wrapParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams textViewParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         LinearLayout innerLayout = new LinearLayout(context);
         innerLayout.setOrientation(VERTICAL);
-        innerLayout.setGravity(Gravity.CENTER);
-        innerLayout.addView(mTitleTextView, wrapParams);
-        innerLayout.addView(mContentTextView, wrapParams);
+        innerLayout.addView(mTitleTextView, textViewParams);
+        innerLayout.addView(mContentTextView, textViewParams);
 
         if (closeButtonPosition == null) {
             addView(innerLayout);
@@ -93,24 +94,24 @@ class GuideMessageView extends LinearLayout {
                     setOrientation(HORIZONTAL);
                     wrapWithMargin.setMargins(padding, padding, 0, padding);
                     addView(mCloseButton, wrapWithMargin);
-                    addView(innerLayout, wrapParams);
+                    addView(innerLayout, textViewParams);
                     break;
                 case Right:
                     setOrientation(HORIZONTAL);
                     wrapWithMargin.setMargins(0, padding, padding, padding);
-                    addView(innerLayout, wrapParams);
+                    addView(innerLayout, textViewParams);
                     addView(mCloseButton, wrapWithMargin);
                     break;
                 case Top:
                     setOrientation(VERTICAL);
                     wrapWithMargin.setMargins(padding, padding, padding, 0);
                     addView(mCloseButton, wrapWithMargin);
-                    addView(innerLayout, wrapParams);
+                    addView(innerLayout, textViewParams);
                     break;
                 case Bottom:
                     setOrientation(VERTICAL);
                     wrapWithMargin.setMargins(padding, 0, padding, padding);
-                    addView(innerLayout, wrapParams);
+                    addView(innerLayout, textViewParams);
                     addView(mCloseButton, wrapWithMargin);
                     break;
             }
@@ -155,12 +156,21 @@ class GuideMessageView extends LinearLayout {
         mTitleTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, size);
     }
 
+    public void setTitleGravity(int gravity) {
+        mTitleTextView.setGravity(gravity);
+    }
+
     public void setContentTextSize(int size) {
         mContentTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, size);
     }
 
     public void setContentTextColor(int color) {
         mContentTextView.setTextColor(color);
+    }
+
+    public void setContentGravity(int gravity) {
+        mContentTextView.setGravity(gravity);
+
     }
 
     public void setColor(int color) {

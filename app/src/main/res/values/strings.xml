@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">ShowCaseView</string>
+    <string name="title">Guide Title Text</string>
+    <string name="description">Guide Description Text\n.....Guide Description Text\n .....Guide Description Text .....</string>
 </resources>

@@ -170,9 +170,10 @@ public class GuideView extends FrameLayout {
 
             if (indicatorDrawable != null) {
                 // Draw Indicator using Drawable
-                final int left = (int) x - indicatorDrawable.getWidth();
+                final int halfWidth = indicatorDrawable.getWidth() / 2;
+                final int left = (int) x - halfWidth;
                 final int top = isTop ? (int) startY : (int) stopY;
-                final int right = (int) x + indicatorDrawable.getWidth();
+                final int right = (int) x + halfWidth;
                 final int bottom = isTop ? (int) stopY : (int) startY;
                 Rect destRect = new Rect(left, top, right, bottom);
 
@@ -348,6 +349,18 @@ public class GuideView extends FrameLayout {
         mMessageView.setTitleTextColor(color);
     }
 
+    public void setTitleTypeFace(Typeface typeFace) {
+        mMessageView.setTitleTypeFace(typeFace);
+    }
+
+    public void setTitleTextSize(int size) {
+        mMessageView.setTitleTextSize(size);
+    }
+
+    public void setTitleGravity(int gravity) {
+        mMessageView.setTitleGravity(gravity);
+    }
+
     public void setContentText(String str) {
         mMessageView.setContentText(str);
     }
@@ -360,22 +373,16 @@ public class GuideView extends FrameLayout {
         mMessageView.setContentSpan(span);
     }
 
-    public void setTitleTypeFace(Typeface typeFace) {
-        mMessageView.setTitleTypeFace(typeFace);
-    }
-
     public void setContentTypeFace(Typeface typeFace) {
         mMessageView.setContentTypeFace(typeFace);
     }
 
-
-    public void setTitleTextSize(int size) {
-        mMessageView.setTitleTextSize(size);
-    }
-
-
     public void setContentTextSize(int size) {
         mMessageView.setContentTextSize(size);
+    }
+
+    public void setContentGravity(int gravity) {
+        mMessageView.setContentGravity(gravity);
     }
 
     public void setBorder(int color, float width) {
@@ -403,13 +410,15 @@ public class GuideView extends FrameLayout {
         private Integer indicatorResId;
         private Integer indicatorMarginStart;
         private String title, contentText;
+        private int titleTextColor;
+        private int titleTextSize;
+        private Integer titleGravity;
+        private int contentTextColor;
+        private int contentTextSize;
+        private Integer contentGravity;
         private Gravity gravity;
         private DismissType dismissType;
         private Context context;
-        private int titleTextColor;
-        private int titleTextSize;
-        private int contentTextColor;
-        private int contentTextSize;
         private Spannable contentSpan;
         private Typeface titleTypeFace, contentTypeFace;
         private GuideListener guideListener;
@@ -527,6 +536,16 @@ public class GuideView extends FrameLayout {
             return this;
         }
 
+        public Builder setTitleGravity(int gravity) {
+            this.titleGravity = gravity;
+            return this;
+        }
+
+        public Builder setContentGravity(int gravity) {
+            this.contentGravity = gravity;
+            return this;
+        }
+
         public Builder setBorder(int color, float width) {
             this.borderColor = color;
             this.borderWidth = width;
@@ -578,27 +597,26 @@ public class GuideView extends FrameLayout {
                 guideView.setTitleTextSize(titleTextSize);
             if (titleTextColor != 0)
                 guideView.setTitleTextColor(titleTextColor);
+            if (titleTypeFace != null)
+                guideView.setTitleTypeFace(titleTypeFace);
+            if (titleGravity != null)
+                guideView.setTitleGravity(titleGravity);
             if (contentTextSize != 0)
                 guideView.setContentTextSize(contentTextSize);
             if (contentTextColor != 0)
                 guideView.setContentTextColor(contentTextColor);
             if (contentSpan != null)
                 guideView.setContentSpan(contentSpan);
-            if (titleTypeFace != null) {
-                guideView.setTitleTypeFace(titleTypeFace);
-            }
-            if (contentTypeFace != null) {
+            if (contentTypeFace != null)
                 guideView.setContentTypeFace(contentTypeFace);
-            }
-            if (guideListener != null) {
+            if (contentGravity != null)
+                guideView.setContentGravity(contentGravity);
+            if (guideListener != null)
                 guideView.mGuideListener = guideListener;
-            }
-            if (borderColor != null && borderWidth != null) {
+            if (borderColor != null && borderWidth != null)
                 guideView.setBorder(borderColor, borderWidth);
-            }
-            if (closeButtonPosition != null && closeButtonBackgroundResource != 0) {
+            if (closeButtonPosition != null && closeButtonBackgroundResource != 0)
                 guideView.setCloseButtonBackground(closeButtonBackgroundResource);
-            }
             if (showOnce && showId != null) {
                 guideView.showOnce(showId);
             } else if (showId != null) {
