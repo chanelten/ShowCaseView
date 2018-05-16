@@ -170,9 +170,10 @@ public class GuideView extends FrameLayout {
 
             if (indicatorDrawable != null) {
                 // Draw Indicator using Drawable
-                final int left = (int) x - indicatorDrawable.getWidth();
+                final int halfWidth = indicatorDrawable.getWidth() / 2;
+                final int left = (int) x - halfWidth;
                 final int top = isTop ? (int) startY : (int) stopY;
-                final int right = (int) x + indicatorDrawable.getWidth();
+                final int right = (int) x + halfWidth;
                 final int bottom = isTop ? (int) stopY : (int) startY;
                 Rect destRect = new Rect(left, top, right, bottom);
 
