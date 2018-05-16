@@ -36,9 +36,9 @@ public class MainActivity extends AppCompatActivity {
                 .setDismissType(GuideView.DismissType.outside)
                 .setTargetView(view1)
                 //.setBackgroundColor(getResources().getColor(android.R.color.transparent))
-                .setIndicator(R.drawable.indicator)
+                .setIndicator(R.mipmap.arrow)
                 .setIndicatorMarginStart(0)
-                .setCloseButton(Position.Left, R.drawable.close)
+                .setCloseButton(Position.Left, R.mipmap.close)
                 .setGuideListener(new GuideView.GuideListener() {
                     @Override
                     public boolean onDismiss(View view) {
