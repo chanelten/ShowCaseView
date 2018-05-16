@@ -6,12 +6,14 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.text.InputType;
 import android.text.Spannable;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -65,6 +67,7 @@ class GuideMessageView extends LinearLayout {
         mTitleTextView.setGravity(Gravity.CENTER);
         mTitleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
         mTitleTextView.setTextColor(Color.BLACK);
+        mTitleTextView.setSingleLine(false);
 
         mContentTextView = new TextView(context);
         mContentTextView.setTextColor(Color.BLACK);
@@ -72,6 +75,7 @@ class GuideMessageView extends LinearLayout {
         mContentTextView.setPadding(padding, 0, padding, padding);
         mContentTextView.setGravity(Gravity.CENTER);
         mContentTextView.setVisibility(View.GONE);
+        mContentTextView.setSingleLine(false);
 
         LinearLayout.LayoutParams wrapParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 

@@ -25,10 +25,10 @@ public class MainActivity extends AppCompatActivity {
         final View view5 = findViewById(R.id.view5);
 
         builder = new GuideView.Builder(MainActivity.this)
-                .setTitle("Guide Title Text")
-                .setTitleTextSize(20)
+                .setTitle(getString(R.string.title))
+                .setTitleTextSize(15)
                 .setTitleTextColor(getResources().getColor(R.color.colorAccent))
-                .setContentText("Guide Description Text\n .....Guide Description Text\n .....Guide Description Text .....")
+                .setContentText(getString(R.string.description))
                 .setContentTextColor(getResources().getColor(R.color.colorPrimary))
                 .setRadius(20)
                 .setBorder(getResources().getColor(R.color.colorBorder), 10.0f)
@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
                 //.setBackgroundColor(getResources().getColor(android.R.color.transparent))
                 .setIndicator(R.mipmap.arrow)
                 .setIndicatorMarginStart(0)
-                .setCloseButton(Position.Left, R.mipmap.close)
+                .setCloseButton(Position.Right, R.mipmap.close)
                 .setGuideListener(new GuideView.GuideListener() {
                     @Override
                     public boolean onDismiss(View view) {
