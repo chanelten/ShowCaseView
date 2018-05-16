@@ -97,7 +97,7 @@ public class GuideView extends FrameLayout {
         this.indicatorMarginStartRequired = indicatorMarginStart;
 
         this.density = context.getResources().getDisplayMetrics().density;
-        this.indicatorHeight = (indicatorDrawable != null ? indicatorDrawable.getHeight() : DEFAULT_INDICATOR_HEIGHT) * density;
+        this.indicatorHeight = (indicatorDrawable != null ? indicatorDrawable.getHeight() / 2 : DEFAULT_INDICATOR_HEIGHT) * density;
         this.padding = (int) (5 * density);
 
         int[] locationTarget = new int[2];
