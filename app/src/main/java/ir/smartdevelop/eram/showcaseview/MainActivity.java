@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
                 .setContentText("Guide Description Text\n .....Guide Description Text\n .....Guide Description Text .....")
                 .setContentTextColor(getResources().getColor(R.color.colorPrimary))
                 .setRadius(20)
-                .setBorder(Color.RED, 10.0f)
+                .setBorder(getResources().getColor(R.color.colorBorder), 10.0f)
                 .setGravity(GuideView.Gravity.center)
                 .setDismissType(GuideView.DismissType.outside)
                 .setTargetView(view1)
