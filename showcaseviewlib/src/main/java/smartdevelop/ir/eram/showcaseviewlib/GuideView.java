@@ -420,7 +420,7 @@ public class GuideView extends FrameLayout {
         private Integer titleGravity;
         private int contentTextColor;
         private Integer contentTextSizeUnit;
-        private Integer contentTextSize;
+        private int contentTextSize;
         private Integer contentGravity;
         private Gravity gravity;
         private DismissType dismissType;
