@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.Typeface;
-import android.text.Spannable;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -15,42 +14,37 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.Nullable;
+import androidx.annotation.Px;
+
 /**
  * Created by Mohammad Reza Eram  on 20/01/2018.
  */
-
 class GuideMessageView extends LinearLayout {
 
-    private final Context context;
     private int radius = -1;
 
     private Paint mPaintBackground;
     private Paint mPaintBorder;
-    private RectF mRect;
 
     private TextView mTitleTextView;
     private TextView mContentTextView;
     private ImageButton mCloseButton;
-    float density;
 
-    GuideMessageView(Context context) {
-        this(context, null, null);
-    }
+    private final RectF mRect = new RectF();
+    private final int[] location = new int[2];
 
-    GuideMessageView(Context context, Position closeButtonPosition, OnClickListener closeButtonListener) {
+    GuideMessageView(Context context, @Nullable Position closeButtonPosition, @Nullable OnClickListener closeButtonListener) {
         super(context);
-        this.context = context;
 
-        density = context.getResources().getDisplayMetrics().density;
+        float density = context.getResources().getDisplayMetrics().density;
         setWillNotDraw(false);
-
-        mRect = new RectF();
 
         mPaintBackground = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaintBackground.setStrokeCap(Paint.Cap.ROUND);
-//        float radius = density * 3.0f;
-//        float dy = density * 2f;
-//        mPaintBackground.setShadowLayer(radius, 0, dy, 0xFF3D3D3D);
 
         setLayerType(LAYER_TYPE_SOFTWARE, null);
         setGravity(Gravity.CENTER);
@@ -63,13 +57,13 @@ class GuideMessageView extends LinearLayout {
         mTitleTextView = new TextView(context);
         mTitleTextView.setPadding(padding, padding, padding, paddingBetween);
         mTitleTextView.setGravity(Gravity.CENTER);
-        mTitleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+        mTitleTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
         mTitleTextView.setTextColor(Color.BLACK);
         mTitleTextView.setSingleLine(false);
 
         mContentTextView = new TextView(context);
         mContentTextView.setTextColor(Color.BLACK);
-        mContentTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+        mContentTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
         mContentTextView.setPadding(padding, 0, padding, padding);
         mContentTextView.setGravity(Gravity.CENTER);
         mContentTextView.setVisibility(View.GONE);
@@ -118,7 +112,7 @@ class GuideMessageView extends LinearLayout {
         }
     }
 
-    public void setTitle(String title) {
+    public void setTitle(CharSequence title) {
         if (title == null) {
             removeView(mTitleTextView);
             return;
@@ -126,45 +120,36 @@ class GuideMessageView extends LinearLayout {
         mTitleTextView.setText(title);
     }
 
-    public void setTitleTextColor(int color) {
+    public void setTitleTextColor(@ColorInt int color) {
         mTitleTextView.setTextColor(color);
     }
 
-    public void setContentText(String content) {
+    public void setContentText(CharSequence content) {
         mContentTextView.setText(content);
-        if (mContentTextView.getVisibility() != VISIBLE) {
-            mContentTextView.setVisibility(View.VISIBLE);
-        }
+        mContentTextView.setVisibility(View.VISIBLE);
     }
 
-    public void setContentSpan(Spannable content) {
-        mContentTextView.setText(content);
-        if (mContentTextView.getVisibility() != VISIBLE) {
-            mContentTextView.setVisibility(View.VISIBLE);
-        }
+    public void setContentTypeface(Typeface typeface) {
+        mContentTextView.setTypeface(typeface);
     }
 
-    public void setContentTypeFace(Typeface typeFace) {
-        mContentTextView.setTypeface(typeFace);
+    public void setTitleTypeface(Typeface typeface) {
+        mTitleTextView.setTypeface(typeface);
     }
 
-    public void setTitleTypeFace(Typeface typeFace) {
-        mTitleTextView.setTypeface(typeFace);
-    }
-
-    public void setTitleTextSize(int size) {
-        mTitleTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, size);
+    public void setTitleTextSize(float size) {
+        mTitleTextView.setTextSize(size);
     }
 
     public void setTitleGravity(int gravity) {
         mTitleTextView.setGravity(gravity);
     }
 
-    public void setContentTextSize(int size) {
-        mContentTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, size);
+    public void setContentTextSize(float size) {
+        mContentTextView.setTextSize(size);
     }
 
-    public void setContentTextColor(int color) {
+    public void setContentTextColor(@ColorInt int color) {
         mContentTextView.setTextColor(color);
     }
 
@@ -173,14 +158,14 @@ class GuideMessageView extends LinearLayout {
 
     }
 
-    public void setColor(int color) {
+    public void setColor(@ColorInt int color) {
         mPaintBackground.setAlpha(255);
         mPaintBackground.setColor(color);
 
         invalidate();
     }
 
-    public void setBorder(int color, float width) {
+    public void setBorder(@ColorInt int color, float width) {
         if (mPaintBorder == null) {
             mPaintBorder = new Paint(Paint.ANTI_ALIAS_FLAG);
             mPaintBorder.setStyle(Paint.Style.STROKE);
@@ -189,16 +174,14 @@ class GuideMessageView extends LinearLayout {
         mPaintBorder.setStrokeWidth(width);
     }
 
-    public void setRadius(int radius) {
+    public void setRadius(@Px int radius) {
         this.radius = radius;
     }
 
-    public void setCloseBtnBackground(int drawableResId) {
+    public void setCloseBtnBackground(@DrawableRes @ColorRes int drawableResId) {
         mCloseButton.setBackgroundColor(Color.TRANSPARENT);
         mCloseButton.setImageResource(drawableResId);
     }
-
-    int location[] = new int[2];
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -207,8 +190,8 @@ class GuideMessageView extends LinearLayout {
 
         mRect.set(getPaddingLeft(),
                 getPaddingTop(),
-                canvas.getWidth() - getPaddingRight(),
-                canvas.getHeight() - getPaddingBottom());
+                getWidth() - getPaddingRight(),
+                getHeight() - getPaddingBottom());
         canvas.drawRoundRect(mRect, radius, radius, mPaintBackground);
         if (mPaintBorder != null) {
             canvas.drawRoundRect(mRect, radius, radius, mPaintBorder);

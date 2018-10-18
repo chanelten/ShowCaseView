@@ -16,7 +16,6 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.Xfermode;
-import android.text.Spannable;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +23,10 @@ import android.view.ViewTreeObserver;
 import android.view.animation.AlphaAnimation;
 import android.widget.FrameLayout;
 
+import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
 import smartdevelop.ir.eram.showcaseviewlib.utils.BitmapUtil;
 import smartdevelop.ir.eram.showcaseviewlib.utils.PersistentData;
 
@@ -148,6 +151,10 @@ public class GuideView extends FrameLayout {
         return display_mode != Configuration.ORIENTATION_PORTRAIT;
     }
 
+    private final Rect srcRect = new Rect();
+    private final Rect destRect = new Rect();
+    private final Rect clipRect = new Rect();
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -159,7 +166,8 @@ public class GuideView extends FrameLayout {
             mPaint.setColor(backgroundColor);
             mPaint.setStyle(Paint.Style.FILL);
             mPaint.setAntiAlias(true);
-            tempCanvas.drawRect(canvas.getClipBounds(), mPaint);
+            canvas.getClipBounds(clipRect);
+            tempCanvas.drawRect(clipRect, mPaint);
 
             // Paint Indicator (Arrow Pointer)
             // Tip of arrow pointer
@@ -175,11 +183,12 @@ public class GuideView extends FrameLayout {
                 final int top = isTop ? (int) startY : (int) stopY;
                 final int right = (int) x + halfWidth;
                 final int bottom = isTop ? (int) stopY : (int) startY;
-                Rect destRect = new Rect(left, top, right, bottom);
+
+                srcRect.set(0,0, indicatorDrawable.getWidth(), indicatorDrawable.getHeight());
+                destRect.set(left, top, right, bottom);
 
                 tempCanvas.drawBitmap(isTop ? indicatorDrawable : BitmapUtil.rotate(indicatorDrawable, 180),
-                        new Rect(0,0, indicatorDrawable.getWidth(), indicatorDrawable.getHeight()),
-                        destRect, null);
+                        srcRect, destRect, null);
             } else {
                 // Draw Indicator using default arrow
                 float lineWidth = 3 * density;
@@ -341,16 +350,16 @@ public class GuideView extends FrameLayout {
         mIsShowing = true;
     }
 
-    public void setTitle(String str) {
+    public void setTitle(CharSequence str) {
         mMessageView.setTitle(str);
     }
 
-    public void setTitleTextColor(int color) {
+    public void setTitleTextColor(@ColorInt int color) {
         mMessageView.setTitleTextColor(color);
     }
 
-    public void setTitleTypeFace(Typeface typeFace) {
-        mMessageView.setTitleTypeFace(typeFace);
+    public void setTitleTypeface(Typeface typeface) {
+        mMessageView.setTitleTypeface(typeface);
     }
 
     public void setTitleTextSize(int size) {
@@ -361,20 +370,16 @@ public class GuideView extends FrameLayout {
         mMessageView.setTitleGravity(gravity);
     }
 
-    public void setContentText(String str) {
+    public void setContentText(CharSequence str) {
         mMessageView.setContentText(str);
     }
 
-    public void setContentTextColor(int color) {
+    public void setContentTextColor(@ColorInt int color) {
         mMessageView.setContentTextColor(color);
     }
 
-    public void setContentSpan(Spannable span) {
-        mMessageView.setContentSpan(span);
-    }
-
-    public void setContentTypeFace(Typeface typeFace) {
-        mMessageView.setContentTypeFace(typeFace);
+    public void setContentTypeface(Typeface typeface) {
+        mMessageView.setContentTypeface(typeface);
     }
 
     public void setContentTextSize(int size) {
@@ -385,11 +390,11 @@ public class GuideView extends FrameLayout {
         mMessageView.setContentGravity(gravity);
     }
 
-    public void setBorder(int color, float width) {
+    public void setBorder(@ColorInt int color, float width) {
         mMessageView.setBorder(color, width);
     }
 
-    public void setCloseButtonBackground(int resId) {
+    public void setCloseButtonBackground(@DrawableRes @ColorRes int resId) {
         mMessageView.setCloseBtnBackground(resId);
     }
 
@@ -409,7 +414,7 @@ public class GuideView extends FrameLayout {
         private Integer backgroundColor;
         private Integer indicatorResId;
         private Integer indicatorMarginStart;
-        private String title, contentText;
+        private CharSequence title, contentText;
         private int titleTextColor;
         private int titleTextSize;
         private Integer titleGravity;
@@ -419,8 +424,7 @@ public class GuideView extends FrameLayout {
         private Gravity gravity;
         private DismissType dismissType;
         private Context context;
-        private Spannable contentSpan;
-        private Typeface titleTypeFace, contentTypeFace;
+        private Typeface titleTypeface, contentTypeface;
         private GuideListener guideListener;
         private Integer borderColor;
         private Float borderWidth;
@@ -438,17 +442,17 @@ public class GuideView extends FrameLayout {
             return this;
         }
 
-        public Builder setTargetView(View view) {
+        public Builder setTargetView(@NonNull View view) {
             this.targetView = view;
             return this;
         }
 
-        public Builder setBackgroundColor(int backgroundColor) {
+        public Builder setBackgroundColor(@ColorInt int backgroundColor) {
             this.backgroundColor = backgroundColor;
             return this;
         }
 
-        public Builder setIndicator(int indicatorResId) {
+        public Builder setIndicator(@DrawableRes int indicatorResId) {
             this.indicatorResId = indicatorResId;
             return this;
         }
@@ -463,33 +467,28 @@ public class GuideView extends FrameLayout {
             return this;
         }
 
-        public Builder setTitle(String title) {
+        public Builder setTitle(CharSequence title) {
             this.title = title;
             return this;
         }
 
-        public Builder setTitleTextColor(int color) {
+        public Builder setTitleTextColor(@ColorInt int color) {
             this.titleTextColor = color;
             return this;
         }
 
-        public Builder setContentText(String contentText) {
+        public Builder setContentText(CharSequence contentText) {
             this.contentText = contentText;
             return this;
         }
 
-        public Builder setContentTextColor(int color) {
+        public Builder setContentTextColor(@ColorInt int color) {
             this.contentTextColor = color;
             return this;
         }
 
-        public Builder setContentSpan(Spannable span) {
-            this.contentSpan = span;
-            return this;
-        }
-
-        public Builder setContentTypeFace(Typeface typeFace) {
-            this.contentTypeFace = typeFace;
+        public Builder setContentTypeface(Typeface typeface) {
+            this.contentTypeface = typeface;
             return this;
         }
 
@@ -498,12 +497,12 @@ public class GuideView extends FrameLayout {
             return this;
         }
 
-        public Builder setTitleTypeFace(Typeface typeFace) {
-            this.titleTypeFace = typeFace;
+        public Builder setTitleTypeface(Typeface typeface) {
+            this.titleTypeface = typeface;
             return this;
         }
 
-        public Builder setCloseButton(Position position, int drawableResId) {
+        public Builder setCloseButton(Position position, @DrawableRes int drawableResId) {
             this.closeButtonPosition = position;
             this.closeButtonBackgroundResource = drawableResId;
             return this;
@@ -546,7 +545,7 @@ public class GuideView extends FrameLayout {
             return this;
         }
 
-        public Builder setBorder(int color, float width) {
+        public Builder setBorder(@ColorInt int color, float width) {
             this.borderColor = color;
             this.borderWidth = width;
             return this;
@@ -597,18 +596,16 @@ public class GuideView extends FrameLayout {
                 guideView.setTitleTextSize(titleTextSize);
             if (titleTextColor != 0)
                 guideView.setTitleTextColor(titleTextColor);
-            if (titleTypeFace != null)
-                guideView.setTitleTypeFace(titleTypeFace);
+            if (titleTypeface != null)
+                guideView.setTitleTypeface(titleTypeface);
             if (titleGravity != null)
                 guideView.setTitleGravity(titleGravity);
             if (contentTextSize != 0)
                 guideView.setContentTextSize(contentTextSize);
             if (contentTextColor != 0)
                 guideView.setContentTextColor(contentTextColor);
-            if (contentSpan != null)
-                guideView.setContentSpan(contentSpan);
-            if (contentTypeFace != null)
-                guideView.setContentTypeFace(contentTypeFace);
+            if (contentTypeface != null)
+                guideView.setContentTypeface(contentTypeface);
             if (contentGravity != null)
                 guideView.setContentGravity(contentGravity);
             if (guideListener != null)
