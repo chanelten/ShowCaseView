@@ -137,16 +137,24 @@ class GuideMessageView extends LinearLayout {
         mTitleTextView.setTypeface(typeface);
     }
 
-    public void setTitleTextSize(float size) {
-        mTitleTextView.setTextSize(size);
+    public void setTitleTextSize(int unit, float size) {
+        if (unit < 0) {
+            mTitleTextView.setTextSize(size);
+        } else {
+            mTitleTextView.setTextSize(unit, size);
+        }
     }
 
     public void setTitleGravity(int gravity) {
         mTitleTextView.setGravity(gravity);
     }
 
-    public void setContentTextSize(float size) {
-        mContentTextView.setTextSize(size);
+    public void setContentTextSize(int unit, float size) {
+        if (unit < 0) {
+            mContentTextView.setTextSize(size);
+        } else {
+            mContentTextView.setTextSize(unit, size);
+        }
     }
 
     public void setContentTextColor(@ColorInt int color) {

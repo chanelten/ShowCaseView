@@ -73,10 +73,9 @@ public class GuideView extends FrameLayout {
 
     public interface GuideListener {
         /**
-         *
          * @param view
          * @return boolean true if ShowCaseView is ended, or false if another ShowCaseView will be displayed.
-         *          This boolean is used to determine if showing a group of ShowCaseView has reached its end for #enableShowOnce.
+         * This boolean is used to determine if showing a group of ShowCaseView has reached its end for #enableShowOnce.
          */
         boolean onDismiss(View view);
     }
@@ -184,7 +183,7 @@ public class GuideView extends FrameLayout {
                 final int right = (int) x + halfWidth;
                 final int bottom = isTop ? (int) stopY : (int) startY;
 
-                srcRect.set(0,0, indicatorDrawable.getWidth(), indicatorDrawable.getHeight());
+                srcRect.set(0, 0, indicatorDrawable.getWidth(), indicatorDrawable.getHeight());
                 destRect.set(left, top, right, bottom);
 
                 tempCanvas.drawBitmap(isTop ? indicatorDrawable : BitmapUtil.rotate(indicatorDrawable, 180),
@@ -362,8 +361,8 @@ public class GuideView extends FrameLayout {
         mMessageView.setTitleTypeface(typeface);
     }
 
-    public void setTitleTextSize(int size) {
-        mMessageView.setTitleTextSize(size);
+    public void setTitleTextSize(int unit, int size) {
+        mMessageView.setTitleTextSize(unit, size);
     }
 
     public void setTitleGravity(int gravity) {
@@ -382,8 +381,8 @@ public class GuideView extends FrameLayout {
         mMessageView.setContentTypeface(typeface);
     }
 
-    public void setContentTextSize(int size) {
-        mMessageView.setContentTextSize(size);
+    public void setContentTextSize(int unit, int size) {
+        mMessageView.setContentTextSize(unit, size);
     }
 
     public void setContentGravity(int gravity) {
@@ -416,10 +415,12 @@ public class GuideView extends FrameLayout {
         private Integer indicatorMarginStart;
         private CharSequence title, contentText;
         private int titleTextColor;
+        private Integer titleTextSizeUnit;
         private int titleTextSize;
         private Integer titleGravity;
         private int contentTextColor;
-        private int contentTextSize;
+        private Integer contentTextSizeUnit;
+        private Integer contentTextSize;
         private Integer contentGravity;
         private Gravity gravity;
         private DismissType dismissType;
@@ -511,10 +512,12 @@ public class GuideView extends FrameLayout {
         /**
          * the defined text size overrides any defined size in the default or provided style
          *
+         * @param unit Unit
          * @param size title text by sp unit
          * @return builder
          */
-        public Builder setContentTextSize(int size) {
+        public Builder setContentTextSize(int unit, int size) {
+            this.contentTextSizeUnit = unit;
             this.contentTextSize = size;
             return this;
         }
@@ -525,7 +528,8 @@ public class GuideView extends FrameLayout {
          * @param size title text by sp unit
          * @return builder
          */
-        public Builder setTitleTextSize(int size) {
+        public Builder setTitleTextSize(int unit, int size) {
+            this.titleTextSizeUnit = unit;
             this.titleTextSize = size;
             return this;
         }
@@ -553,6 +557,7 @@ public class GuideView extends FrameLayout {
 
         /**
          * Show the ShowCaseView only once, and persists its state.
+         *
          * @return
          */
         public Builder enableShowOnce(String id) {
@@ -573,6 +578,7 @@ public class GuideView extends FrameLayout {
         /**
          * Show the ShowCaseView again, and persists its state.
          * This function can be called even without instantiating a new Builder object.
+         *
          * @param context
          */
         public static void disableShowOnce(Context context, String id) {
@@ -593,7 +599,7 @@ public class GuideView extends FrameLayout {
             if (contentText != null)
                 guideView.setContentText(contentText);
             if (titleTextSize != 0)
-                guideView.setTitleTextSize(titleTextSize);
+                guideView.setTitleTextSize(titleTextSizeUnit == null ? -1 : titleTextSizeUnit, titleTextSize);
             if (titleTextColor != 0)
                 guideView.setTitleTextColor(titleTextColor);
             if (titleTypeface != null)
@@ -601,7 +607,7 @@ public class GuideView extends FrameLayout {
             if (titleGravity != null)
                 guideView.setTitleGravity(titleGravity);
             if (contentTextSize != 0)
-                guideView.setContentTextSize(contentTextSize);
+                guideView.setContentTextSize(contentTextSizeUnit == null ? -1 : contentTextSizeUnit, contentTextSize);
             if (contentTextColor != 0)
                 guideView.setContentTextColor(contentTextColor);
             if (contentTypeface != null)
