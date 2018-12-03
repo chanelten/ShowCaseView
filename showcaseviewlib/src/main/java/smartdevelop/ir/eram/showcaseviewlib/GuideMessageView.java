@@ -9,7 +9,6 @@ import android.graphics.Typeface;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -20,6 +19,9 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.Px;
+
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 /**
  * Created by Mohammad Reza Eram on 20/01/2018.
@@ -59,6 +61,7 @@ class GuideMessageView extends LinearLayout {
         }
 
         setPadding(padding, padding, padding, padding);
+        setWeightSum(1);
 
         mTitleTextView = new TextView(context);
         mTitleTextView.setPadding(padding, padding, padding, paddingBetween);
@@ -75,7 +78,7 @@ class GuideMessageView extends LinearLayout {
         mContentTextView.setVisibility(View.GONE);
         mContentTextView.setSingleLine(false);
 
-        LinearLayout.LayoutParams textViewParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams textViewParams = new LayoutParams(MATCH_PARENT, WRAP_CONTENT, 1);
 
         LinearLayout innerLayout = new LinearLayout(context);
         innerLayout.setOrientation(VERTICAL);
@@ -87,7 +90,7 @@ class GuideMessageView extends LinearLayout {
         } else {
             mCloseButton = new ImageButton(context);
             mCloseButton.setOnClickListener(closeButtonListener);
-            LinearLayout.LayoutParams wrapWithMargin = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            LinearLayout.LayoutParams wrapWithMargin = new LayoutParams(WRAP_CONTENT, WRAP_CONTENT);
 
             switch (closeButtonPosition) {
                 case Left:
