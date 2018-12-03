@@ -91,7 +91,7 @@ public class GuideView extends FrameLayout {
 
     private GuideView(Context context, View view, int radius, int backgroundColor,
                       Integer drawableIndicator, int indicatorMarginStart,
-                      Integer closeButtonPadding, Position closeButtonPosition) {
+                      Integer messageViewPadding, Position closeButtonPosition) {
         super(context);
         setWillNotDraw(false);
 
@@ -111,7 +111,7 @@ public class GuideView extends FrameLayout {
                 locationTarget[0] + target.getWidth(),
                 locationTarget[1] + target.getHeight());
 
-        mMessageView = new GuideMessageView(getContext(), closeButtonPosition, closeButtonPadding, new OnClickListener() {
+        mMessageView = new GuideMessageView(getContext(), closeButtonPosition, messageViewPadding, new OnClickListener() {
             @Override
             public void onClick(View v) {
                 dismiss();
@@ -432,7 +432,7 @@ public class GuideView extends FrameLayout {
         private GuideListener guideListener;
         private Integer borderColor;
         private Float borderWidth;
-        private Integer closeButtonPadding;
+        private Integer messageViewPadding;
         private Position closeButtonPosition;
         private int closeButtonBackgroundResource;
         private boolean showOnce;
@@ -513,8 +513,8 @@ public class GuideView extends FrameLayout {
             return this;
         }
 
-        public Builder setCloseButtonPadding(@Px int padding) {
-            this.closeButtonPadding = padding;
+        public Builder setMessageViewPadding(@Px int padding) {
+            this.messageViewPadding = padding;
             return this;
         }
 
@@ -600,7 +600,7 @@ public class GuideView extends FrameLayout {
                     backgroundColor != null ? backgroundColor : DEFAULT_BACKGROUND_COLOR,
                     indicatorResId,
                     indicatorMarginStart != null ? indicatorMarginStart : DEFAULT_INDICATOR_MARGIN_START,
-                    closeButtonPadding,
+                    messageViewPadding,
                     closeButtonPosition);
             guideView.mGravity = gravity != null ? gravity : Gravity.auto;
             guideView.dismissType = dismissType != null ? dismissType : DismissType.targetView;
