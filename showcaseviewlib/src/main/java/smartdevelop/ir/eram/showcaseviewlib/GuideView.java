@@ -27,6 +27,7 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
+import androidx.annotation.Px;
 import smartdevelop.ir.eram.showcaseviewlib.utils.BitmapUtil;
 import smartdevelop.ir.eram.showcaseviewlib.utils.PersistentData;
 
@@ -88,7 +89,9 @@ public class GuideView extends FrameLayout {
         outside, anywhere, targetView
     }
 
-    private GuideView(Context context, View view, int radius, int backgroundColor, Integer drawableIndicator, int indicatorMarginStart, Position closeButtonPosition) {
+    private GuideView(Context context, View view, int radius, int backgroundColor,
+                      Integer drawableIndicator, int indicatorMarginStart,
+                      Integer closeButtonPadding, Position closeButtonPosition) {
         super(context);
         setWillNotDraw(false);
 
@@ -108,7 +111,7 @@ public class GuideView extends FrameLayout {
                 locationTarget[0] + target.getWidth(),
                 locationTarget[1] + target.getHeight());
 
-        mMessageView = new GuideMessageView(getContext(), closeButtonPosition, new OnClickListener() {
+        mMessageView = new GuideMessageView(getContext(), closeButtonPosition, closeButtonPadding, new OnClickListener() {
             @Override
             public void onClick(View v) {
                 dismiss();
@@ -429,6 +432,7 @@ public class GuideView extends FrameLayout {
         private GuideListener guideListener;
         private Integer borderColor;
         private Float borderWidth;
+        private Integer closeButtonPadding;
         private Position closeButtonPosition;
         private int closeButtonBackgroundResource;
         private boolean showOnce;
@@ -506,6 +510,11 @@ public class GuideView extends FrameLayout {
         public Builder setCloseButton(Position position, @DrawableRes int drawableResId) {
             this.closeButtonPosition = position;
             this.closeButtonBackgroundResource = drawableResId;
+            return this;
+        }
+
+        public Builder setCloseButtonPadding(@Px int padding) {
+            this.closeButtonPadding = padding;
             return this;
         }
 
@@ -590,6 +599,7 @@ public class GuideView extends FrameLayout {
                     radius != null ? radius : DEFAULT_RADIUS,
                     backgroundColor != null ? backgroundColor : DEFAULT_BACKGROUND_COLOR,
                     indicatorResId,
+                    closeButtonPadding,
                     indicatorMarginStart != null ? indicatorMarginStart : DEFAULT_INDICATOR_MARGIN_START,
                     closeButtonPosition);
             guideView.mGravity = gravity != null ? gravity : Gravity.auto;

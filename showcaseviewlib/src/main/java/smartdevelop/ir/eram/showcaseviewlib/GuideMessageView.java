@@ -17,11 +17,12 @@ import android.widget.TextView;
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
 import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.Px;
 
 /**
- * Created by Mohammad Reza Eram  on 20/01/2018.
+ * Created by Mohammad Reza Eram on 20/01/2018.
  */
 class GuideMessageView extends LinearLayout {
 
@@ -37,7 +38,10 @@ class GuideMessageView extends LinearLayout {
     private final RectF mRect = new RectF();
     private final int[] location = new int[2];
 
-    GuideMessageView(Context context, @Nullable Position closeButtonPosition, @Nullable OnClickListener closeButtonListener) {
+    GuideMessageView(@NonNull Context context,
+                     @Nullable Position closeButtonPosition,
+                     @Nullable Integer padding,
+                     @Nullable OnClickListener closeButtonListener) {
         super(context);
 
         float density = context.getResources().getDisplayMetrics().density;
@@ -48,9 +52,11 @@ class GuideMessageView extends LinearLayout {
 
         setLayerType(LAYER_TYPE_SOFTWARE, null);
         setGravity(Gravity.CENTER);
-
-        final int padding = (int) (10 * density);
         final int paddingBetween = (int) (6 * density);
+
+        if (padding == null) {
+            padding = (int) (10 * density);
+        }
 
         setPadding(padding, padding, padding, padding);
 
