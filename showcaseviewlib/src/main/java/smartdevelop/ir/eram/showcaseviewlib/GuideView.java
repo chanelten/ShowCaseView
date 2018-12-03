@@ -599,8 +599,8 @@ public class GuideView extends FrameLayout {
                     radius != null ? radius : DEFAULT_RADIUS,
                     backgroundColor != null ? backgroundColor : DEFAULT_BACKGROUND_COLOR,
                     indicatorResId,
-                    closeButtonPadding,
                     indicatorMarginStart != null ? indicatorMarginStart : DEFAULT_INDICATOR_MARGIN_START,
+                    closeButtonPadding,
                     closeButtonPosition);
             guideView.mGravity = gravity != null ? gravity : Gravity.auto;
             guideView.dismissType = dismissType != null ? dismissType : DismissType.targetView;
